@@ -1,5 +1,5 @@
 document.getElementById("year").textContent =
-  "© " + new Date().getFullYear() + " Comet Builds";
+  "© " + new Date().getFullYear() + " Orbital Studios";
 
 var root = document.documentElement;
 

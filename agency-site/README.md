@@ -1,6 +1,6 @@
-# Comet Builds — website
+# Orbital Studios — website
 
-A single-page marketing site for Comet Builds, a student-run web design
+A single-page marketing site for Orbital Studios, a student-run web design
 studio. Plain HTML/CSS/JS — **no build step, no Node, no npm.** Just open
 the file or upload it to a host.
 
