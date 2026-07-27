@@ -3,18 +3,14 @@ document.getElementById("year").textContent =
 
 var root = document.documentElement;
 
-// ---- Page load fade-in: body starts at opacity 0 (see styles.css). This
-// script tag sits at the end of <body>, so the DOM (including the hero's
-// .reveal elements below) is already parsed by the time this line runs —
-// triggering the fade here, rather than on window "load", keeps it in
-// sync with the hero's own entrance animation instead of lagging behind
-// image/font loading. ----
+// Body starts at opacity 0 (see styles.css). This script runs at the end
+// of <body>, so the DOM is already parsed by the time we get here, and
+// triggering the fade now keeps it in sync with the hero's own entrance
+// animation instead of waiting on window "load".
 document.body.classList.add("loaded");
 
-// ---- Theme toggle: explicit light/dark, stamped as data-theme on <html>.
-// The button itself has been removed from the nav (site is dark-only for
-// now), so this is guarded to a no-op rather than deleted — dropping the
-// button back into index.html is all it'd take to bring it back. ----
+// Theme toggle button isn't in the nav right now (site is dark-only), so
+// this just no-ops until it's added back.
 var themeToggleBtn = document.getElementById("themeToggle");
 if (themeToggleBtn) {
   themeToggleBtn.addEventListener("click", function () {
@@ -25,7 +21,7 @@ if (themeToggleBtn) {
   });
 }
 
-// ---- Scroll-reveal ----
+// Scroll-reveal
 var revealEls = document.querySelectorAll(".reveal");
 var io = new IntersectionObserver(
   function (entries) {
@@ -42,7 +38,7 @@ revealEls.forEach(function (el) {
   io.observe(el);
 });
 
-// ---- Timeline fill tracks scroll position through the section ----
+// Timeline fill tracks scroll position through the section
 var timelineEl = document.getElementById("timeline");
 var timelineFill = document.getElementById("timelineFill");
 function updateTimeline() {
@@ -56,7 +52,7 @@ function updateTimeline() {
 window.addEventListener("scroll", updateTimeline, { passive: true });
 updateTimeline();
 
-// ---- Testimonials autoplay + dots ----
+// Testimonials autoplay + dots
 var slides = document.querySelectorAll(".testi-slide");
 var dots = document.querySelectorAll(".testi-dot");
 var activeSlide = 0;
@@ -78,8 +74,7 @@ setInterval(function () {
   showSlide((activeSlide + 1) % slides.length);
 }, 6000);
 
-// ---- Contact form: submits to Formspree (see the form's `action` in
-// index.html — replace YOUR_FORM_ID with your own before this goes live) ----
+// Contact form: submits to Formspree (see the form's `action` in index.html)
 var contactForm = document.getElementById("contactForm");
 contactForm.addEventListener("submit", function (e) {
   e.preventDefault();
@@ -107,11 +102,10 @@ contactForm.addEventListener("submit", function (e) {
 var prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 var canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
-// ---- Background canvas: a quiet starfield with one comet drifting all
-// the way across the viewport every so often. Fixed to the screen (not
-// the hero), so it plays behind every section as you scroll, not just
-// the top. Purely decorative — skipped entirely for prefers-reduced-motion,
-// and paused via the Page Visibility API when the tab isn't active. ----
+// Background canvas: a quiet starfield with a comet drifting across the
+// viewport every so often. Fixed to the screen, not the hero, so it plays
+// behind every section. Purely decorative, skipped for reduced-motion,
+// and paused when the tab isn't active.
 (function initBackgroundCanvas() {
   var canvas = document.getElementById("bgCanvas");
   if (!canvas || prefersReducedMotion) return;
@@ -198,7 +192,7 @@ var canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
       if (comet.x - comet.len > w + 40) {
         comet = null;
-        nextCometFrame = frame + 480 + Math.random() * 300; // pause before the next pass
+        nextCometFrame = frame + 480 + Math.random() * 300; // wait before the next pass
       }
     } else if (frame >= nextCometFrame) {
       spawnComet(w, h);
@@ -228,9 +222,8 @@ var canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
   start();
 })();
 
-// ---- Cursor glow: a soft blue light that follows the pointer across the
-// whole page (see #cursorGlow in styles.css), not just the hero. Desktop
-// mouse only, skipped for reduced-motion. ----
+// Cursor glow: soft blue light that follows the pointer across the whole
+// page. Desktop mouse only, skipped for reduced-motion.
 (function initCursorGlow() {
   var glow = document.getElementById("cursorGlow");
   if (!glow || !canHover || prefersReducedMotion) return;
@@ -247,11 +240,9 @@ var canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
   });
 })();
 
-// ---- Click-and-drag sparkle trail: a little bit of fun, not a core
-// feature — press and drag anywhere to leave a trail of fading sparkles.
-// Uses pointer events so it works with touch too. Skipped for
-// prefers-reduced-motion (dragging still works, it just doesn't spawn
-// particles). ----
+// Click-and-drag sparkle trail: press and drag anywhere to leave a trail
+// of fading sparkles. Uses pointer events so it works with touch too.
+// Skipped for reduced-motion (dragging still works, just no particles).
 (function initSparkleTrail() {
   var canvas = document.getElementById("fxCanvas");
   if (!canvas || prefersReducedMotion) return;
@@ -284,7 +275,7 @@ var canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
       x: x,
       y: y,
       vx: Math.cos(angle) * speed,
-      vy: Math.sin(angle) * speed - 0.35, // gentle upward drift
+      vy: Math.sin(angle) * speed - 0.35, // slight upward drift
       size: Math.random() * 2 + 1.5,
       life: 1,
       decay: Math.random() * 0.02 + 0.018,
@@ -352,10 +343,9 @@ var canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
   });
 })();
 
-// ---- "Click me!" hint: follows the cursor for the first few seconds (or
-// until the visitor's first click, whichever comes first), pointing them
-// toward the click-and-drag sparkle trail above. Never shown again after
-// that — this is a one-time nudge, not a persistent UI element. ----
+// "Click me!" hint: follows the cursor for the first few seconds, or
+// until the visitor clicks, whichever comes first, pointing them toward
+// the sparkle trail above. Only shows once per visit.
 (function initClickHint() {
   var hint = document.getElementById("clickHint");
   if (!hint || !canHover || prefersReducedMotion) return;

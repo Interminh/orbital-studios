@@ -1,10 +1,7 @@
-/* ---------------------------------------------------------------------
-   Orbital Studios — dark, premium design system.
-   Plain CSS, no build step. Colors/motion are custom properties under
-   :root so the whole site (palette + timing) can be retuned from one
-   place. Dark is the primary/default look; a light variant is still
-   available via the nav theme toggle or an explicit OS preference.
---------------------------------------------------------------------- */
+/* Orbital Studios site styles. Plain CSS, no build step. Colors and
+   motion timing are custom properties under :root so the whole site can
+   be retuned from one place. Dark is the default look; a light palette
+   still exists for when the theme toggle comes back. */
 :root {
   --ice-50: #f5fbfe;
   --ice-100: #e7f5fc;
@@ -34,7 +31,7 @@
   --shadow-card: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 1px 2px rgba(0, 0, 0, 0.4);
   --glow-color: 58, 164, 218; /* rgb triplet reused in rgba() glows */
 
-  /* Motion: one easing/duration scale used everywhere so animation feels
+  /* One easing/duration scale used everywhere so animation stays
      consistent instead of every element having its own timing. */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
@@ -43,7 +40,7 @@
   --dur-slow: 0.7s;
 
   /* Cursor-glow position, updated live from js/script.js as the pointer
-     moves anywhere on the page (not just the hero). */
+     moves anywhere on the page. */
   --mx: 50%;
   --my: 30%;
 
@@ -51,12 +48,8 @@
   font-family: "Inter", -apple-system, "Segoe UI", ui-sans-serif, sans-serif;
 }
 
-/* The site always starts dark now, regardless of the visitor's OS
-   preference — there's no toggle in the nav anymore to switch to light.
-   (The auto-light-on-OS-preference block that used to live here has been
-   disabled, not deleted-everywhere: the light palette itself still exists
-   below in :root[data-theme="light"] for future use, it's just no longer
-   reachable from the UI.) */
+/* Site is dark-only for now, no toggle in the nav. The light palette
+   below is kept around for when that changes. */
 :root[data-theme="dark"] {
   --bg-page: #06090d; --bg-raised: #10161f; --bg-tint: #0a0f16;
   --text-heading: #f1f5f9; --text-body: #9aa7b5; --text-muted: #6b7787;
@@ -75,9 +68,8 @@
 }
 
 * { box-sizing: border-box; }
-/* Text isn't selectable site-wide (part of the "app-like" feel) — form
-   fields are the one deliberate exception, since visitors need to
-   select/edit what they've typed into the contact form. */
+/* Text isn't selectable site-wide, for an app-like feel. Form fields are
+   the exception, since visitors need to edit what they type in. */
 html, body { -webkit-user-select: none; -moz-user-select: none; user-select: none; }
 input, textarea { -webkit-user-select: text; -moz-user-select: text; user-select: text; }
 html { scroll-behavior: smooth; }
@@ -86,8 +78,8 @@ html { scroll-behavior: smooth; }
   * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
 }
 
-/* Subtle whole-page fade-in on load, toggled by js/script.js adding
-   `.loaded` to <body> once the page is ready. Kept short and un-fussy. */
+/* Whole-page fade-in on load, toggled by js/script.js adding `.loaded`
+   to <body> once the page is ready. */
 body {
   margin: 0;
   background: var(--bg-page);
@@ -100,19 +92,14 @@ body {
 body.loaded { opacity: 1; }
 
 /* ---------------- AMBIENT / INTERACTIVE LAYERS ----------------
-   Three fixed, full-viewport, pointer-events:none layers, all driven from
-   js/script.js and all skipped for prefers-reduced-motion:
-   - .bg-canvas   — quiet starfield + comet, painted directly on top of
-                    every section (z-index above normal page content) so
-                    it's always visible no matter which section is on
-                    screen. The canvas itself is transparent except for
-                    the stars/comet pixels, so normal alpha compositing
-                    is all that's needed here — no blend-mode required.
-   - #cursorGlow  — soft blue glow that follows the pointer anywhere on
-                    the page (radial-gradient reads --mx/--my, set on
-                    :root by a document-wide mousemove listener)
-   - .fx-canvas   — click-and-drag sparkle trail, sits above everything
-   None of these ever intercept clicks; they're purely decorative. */
+   Fixed, full-viewport, pointer-events:none layers driven from
+   js/script.js, all skipped for prefers-reduced-motion:
+   - .bg-canvas   starfield + comet, painted above normal content so it
+                  stays visible no matter which section is on screen
+   - #cursorGlow  soft blue glow that follows the pointer, reads
+                  --mx/--my set by a mousemove listener on :root
+   - .fx-canvas   click-and-drag sparkle trail, sits above everything
+   None of these intercept clicks; they're purely decorative. */
 .bg-canvas {
   position: fixed;
   inset: 0;
@@ -122,13 +109,9 @@ body.loaded { opacity: 1; }
   pointer-events: none;
   transition: opacity var(--dur-slow) var(--ease-soft);
 }
-/* The starfield/comet is a dark-sky effect — hide it in light mode rather
-   than have stars float over a white page. The site is dark-only for now
-   (no theme toggle in the nav), so data-theme="light" can't actually be
-   set from the UI — this rule is dormant, kept only for if the toggle
-   ever comes back. There's deliberately no OS-preference version of this
-   rule anymore: that used to hide the canvas whenever a visitor's OS
-   preferred light, even though the site itself always renders dark now. */
+/* Hide the starfield in light mode rather than float stars over a white
+   page. Dormant for now since there's no way to set data-theme="light"
+   from the UI, kept for when the toggle comes back. */
 :root[data-theme="light"] .bg-canvas { opacity: 0; }
 
 #cursorGlow {
@@ -151,8 +134,8 @@ body.loaded { opacity: 1; }
   pointer-events: none;
 }
 
-/* One-time "Click me!" hint that follows the cursor until the visitor's
-   first click/tap, then never appears again for the session. */
+/* "Click me!" hint that follows the cursor until the first click/tap,
+   then stays hidden for the rest of the session. */
 #clickHint {
   position: fixed;
   top: 0;
@@ -197,8 +180,8 @@ button { font: inherit; }
 .brand:hover .brand-mark svg { filter: drop-shadow(0 0 6px rgba(var(--glow-color), 0.6)); }
 .brand-name { font-weight: 800; font-size: 1.05rem; color: var(--text-heading); letter-spacing: -0.01em; }
 
-/* Nav links get an animated underline instead of an instant color swap —
-   small, tasteful micro-interaction reused for footer links too. */
+/* Nav links get an animated underline instead of an instant color swap,
+   reused for footer links too. */
 .nav-links { display: none; align-items: center; gap: 1.75rem; font-size: 0.88rem; font-weight: 600; color: var(--text-body); }
 .nav-links a, .footer-meta a {
   position: relative; text-decoration: none; transition: color var(--dur) var(--ease-soft);
@@ -256,8 +239,8 @@ button { font: inherit; }
 .hero-ctas { margin-top: 1.6rem; display: grid; gap: 0.65rem; width: 100%; }
 @media (min-width: 480px) { .hero-ctas { grid-auto-flow: column; justify-content: start; } }
 
-/* Hero entrance: headline/CTAs/etc. stagger in on load via .hero .reveal
-   (JS marks these is-visible immediately, no scroll trigger needed). */
+/* Hero entrance: headline/CTAs stagger in on load via .hero .reveal, JS
+   marks these is-visible immediately, no scroll trigger needed. */
 .hero .reveal { transition-duration: var(--dur-slow); transition-timing-function: var(--ease-out); }
 
 
@@ -279,9 +262,8 @@ button { font: inherit; }
 .trust-item:hover { opacity: 1; color: var(--text-body); }
 
 /* ---------------- SCROLL REVEAL ---------------- */
-/* JS (IntersectionObserver) toggles .is-visible when an element enters the
-   viewport. One consistent fade + slight upward motion, no per-section
-   one-off timings. */
+/* JS (IntersectionObserver) toggles .is-visible when an element enters
+   the viewport. One consistent fade + slight upward motion. */
 .reveal {
   opacity: 0;
   transform: translateY(28px);
@@ -305,10 +287,9 @@ button { font: inherit; }
 @media (min-width: 640px) { .grid-cards { grid-template-columns: 1fr 1fr; } }
 @media (min-width: 1024px) { .grid-cards { grid-template-columns: repeat(3, 1fr); } }
 
-/* The grid itself no longer fades as one flat block — each card gets its
-   own staggered entrance for a more premium feel. The .reveal class still
-   triggers visibility via JS; we just cancel its default motion on the
-   grid wrapper and apply per-card transitions with nth-child delays. */
+/* Each card gets its own staggered entrance instead of the grid fading in
+   as one block. .reveal still triggers visibility via JS, we just cancel
+   its default motion on the wrapper and stagger per card instead. */
 .grid-cards.reveal { opacity: 1; transform: none; }
 .grid-cards .card {
   opacity: 0;
@@ -319,11 +300,9 @@ button { font: inherit; }
 .grid-cards.is-visible .card:nth-child(2) { transition-delay: 0.12s; }
 .grid-cards.is-visible .card:nth-child(3) { transition-delay: 0.19s; }
 .grid-cards.is-visible .card:nth-child(4) { transition-delay: 0.26s; }
-/* `.grid-cards.is-visible .card` above is more specific than a bare
-   `.card:hover`, so without this the resting `transform: none` would
-   silently win and the hover lift below would never actually show once a
-   card had revealed. Matching the same ancestor chain here keeps hover
-   working after the entrance animation finishes. */
+/* Needed because `.grid-cards.is-visible .card` above is more specific
+   than a bare `.card:hover`. Without this, its resting `transform: none`
+   would win and the hover lift would never show after cards reveal. */
 .grid-cards.is-visible .card:hover { transform: translateY(-7px) scale(1.015); }
 
 .card {
@@ -332,9 +311,8 @@ button { font: inherit; }
   transition: box-shadow var(--dur) var(--ease-soft), transform var(--dur-slow) var(--ease-out),
     border-color var(--dur) var(--ease-soft), opacity var(--dur-slow) var(--ease-out);
 }
-/* Hover-in uses its own faster, slightly overshooting easing so the "pop"
-   feels responsive; hover-out falls back to .card's slower, gentler
-   transition above for a calmer settle. */
+/* Hover-in uses a faster, slightly overshooting easing so the pop feels
+   responsive; hover-out falls back to .card's slower transition above. */
 .card:hover {
   transition: transform 0.32s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow var(--dur) var(--ease-soft),
     border-color var(--dur) var(--ease-soft);

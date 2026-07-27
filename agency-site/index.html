@@ -12,16 +12,9 @@
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
-  <!-- Global ambient/interactive layers (see js/script.js + the "AMBIENT /
-       INTERACTIVE LAYERS" block in css/styles.css). All pointer-events:none
-       except the sparkle trail's underlying page listeners, and all
-       skipped for prefers-reduced-motion:
-         - #bgCanvas   starfield + a comet that drifts across the whole
-                       screen every so often, fixed behind every section
-         - #cursorGlow soft blue glow that follows the pointer anywhere
-                       on the page
-         - #fxCanvas   click-and-drag sparkle trail (try it!)
-         - #clickHint  one-time "Click me!" nudge toward that sparkle trail -->
+  <!-- Ambient layers: starfield/comet, cursor glow, sparkle trail, and the
+       click-me hint. Logic lives in js/script.js, styles in styles.css.
+       All disabled for prefers-reduced-motion. -->
   <canvas id="bgCanvas" class="bg-canvas" aria-hidden="true"></canvas>
   <div id="cursorGlow" aria-hidden="true"></div>
   <canvas id="fxCanvas" class="fx-canvas" aria-hidden="true"></canvas>
@@ -45,10 +38,8 @@
         <a href="#contact">Contact</a>
       </div>
       <div class="nav-right">
-        <!-- Theme toggle button removed so the site can't be switched back
-             to light mode — the button/CSS/JS for it are still in the
-             codebase (see .theme-toggle in styles.css, the click handler
-             in script.js), just not rendered here. -->
+        <!-- Theme toggle is disabled, site is dark-only for now. The
+             button/CSS/JS still exist if we want to bring it back. -->
         <a href="#contact" class="btn btn-primary">Get a Free Site</a>
       </div>
     </nav>
@@ -209,9 +200,7 @@
             <p style="margin-top:0.75rem; color:var(--text-body);">Fill out the form and we'll get back to you in a few business days.</p>
           </div>
 
-          <!-- Submits to Formspree so messages land in your inbox — no backend needed.
-               TODO: replace YOUR_FORM_ID below with your own Formspree form ID
-               (sign up free at https://formspree.io, see README for steps). -->
+          <!-- Submits to Formspree, no backend needed. See README for setup. -->
           <form class="contact-form" id="contactForm" action="https://formspree.io/f/mdaqygvd" method="POST">
             <div class="row-2">
               <input class="field" type="text" name="name" placeholder="Your name" required />
